@@ -1,6 +1,9 @@
 package me.wonny;
 
-import java.io.File;
+import com.holub.database.Database;
+import com.holub.database.jdbc.JDBCStatement;
+
+import java.io.IOException;
 import java.sql.*;
 
 public class DesignPatternReport {
@@ -13,12 +16,15 @@ public class DesignPatternReport {
         }
 
         Statement statement = null;
-        Connection connection = null;
+        Database database = null;
         final String pathname = "c:/dp2020";
         try {
-            connection = DriverManager.getConnection("file:/" + pathname, "harpo", "swordfish");
-            statement = connection.createStatement();
-
+             database = new Database(pathname);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            statement = new JDBCStatement(database);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM address");
             System.out.println(resultSetasString(resultSet));
 
