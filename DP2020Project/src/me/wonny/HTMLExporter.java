@@ -7,8 +7,6 @@ import java.util.Iterator;
 
 public class HTMLExporter implements Table.Exporter {
     private final Writer out;
-    private 	  int	 width;
-
 
     public HTMLExporter(Writer out) {
         this.out = out;
