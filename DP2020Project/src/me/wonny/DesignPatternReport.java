@@ -27,21 +27,22 @@ public class DesignPatternReport {
             statement = new JDBCStatement(database);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM address");
             System.out.println(resultSetasString(resultSet));
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         // At this point we've earned access to the database
+
+//        FileWriter fileWriter = new FileWriter("c:/exporthtml.html");
     }
 
-    static String formatColumn(String msg, int width) {
+    public static String formatColumn(String msg, int width) {
         StringBuffer b = new StringBuffer(msg);
         for (width -= msg.length(); --width >= 0; )
             b.append(" ");
         return b.toString();
     }
 
-    static String resultSetasString(ResultSet results) throws SQLException {
+    public static String resultSetasString(ResultSet results) throws SQLException {
         ResultSetMetaData metadata = results.getMetaData();
 
         StringBuffer b = new StringBuffer();
