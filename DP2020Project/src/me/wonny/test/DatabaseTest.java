@@ -14,10 +14,8 @@ public class DatabaseTest {
     public void insertAndSelectAddress() {
         try {
             Class.forName("com.holub.database.jdbc.JDBCDriver").newInstance();
-            Statement statement = null;
-            Database database = null;
-            database = new Database("c:/dp2020");
-            statement = new JDBCStatement(database);
+            Database database = new Database("c:/dp2020");
+            Statement statement = new JDBCStatement(database);
             statement.executeUpdate("create table address (addrId int, street varchar, city varchar, state char(2), zip int, primary key(addrId))");
             statement.executeUpdate("create table name(first varchar(10), last varchar(10), addrId integer)");
             statement.executeUpdate("insert into address values( 0,'12 MyStreet','Berkeley','CA','99999')");
@@ -31,7 +29,6 @@ public class DatabaseTest {
             assertEquals(resultSet.getString("state"), "CA");
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 }
