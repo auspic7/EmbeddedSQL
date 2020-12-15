@@ -20,10 +20,15 @@ public class XMLExporter implements Table.Exporter {
     @Override
     public void storeMetadata(String tableName, int width, int height, Iterator columnNames) throws IOException {
         this.tableName = tableName;
+        out.write("<" + tableName + ">\n" +
+                "<colnames>\n");
         while (columnNames.hasNext()){
-            this.columnNames.add(columnNames.next().toString());
+            String colname = columnNames.next().toString();
+            this.columnNames.add(colname);
+            out.write("<" + colname + "/>\n");
         }
-        out.write("<" + tableName + ">\n");
+        out.write("</colnames>\n");
+
     }
 
     @Override
