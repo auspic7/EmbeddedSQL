@@ -572,6 +572,21 @@ import com.holub.tools.ArrayIterator;
 		if (other != null)
 			otherTables = (Table[]) other.toArray(new Table[other.size()]);
 
+		if (requestedColumns == null){
+			List<String> resultColnames = new ArrayList<String>(Arrays.asList(this.columnNames));
+			if (otherTables != null) {
+				for(Table joiningTable : otherTables){
+					Cursor cursor = joiningTable.rows();
+					cursor.advance();
+					for(int i = 0; i< cursor.columnCount(); i++){
+						String nextColname = cursor.columnName(i);
+						if(!resultColnames.contains(nextColname)) resultColnames.add(nextColname);
+					}
+				}
+			}
+			columnNames = resultColnames.toArray(new String[resultColnames.size()]);
+		}
+
 		return select(where, columnNames, otherTables);
 	}
 
