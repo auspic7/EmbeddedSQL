@@ -2,7 +2,6 @@ package me.wonny.test;
 
 import com.holub.database.Table;
 import com.holub.database.TableFactory;
-import me.wonny.HTMLExporter;
 import org.junit.Test;
 
 import java.io.FileWriter;
@@ -19,7 +18,6 @@ public class XMLExporterTest {
             Writer writer = new FileWriter("c:/dp2020/people.xml");
             people.export(new XMLExporter(writer));
             writer.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
