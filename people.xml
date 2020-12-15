@@ -1,4 +1,9 @@
 <people>
+<colnames>
+<last/>
+<first/>
+<addrId/>
+</colnames>
 <row>
 <last>Holub</last>
 <first>Allen</first>
