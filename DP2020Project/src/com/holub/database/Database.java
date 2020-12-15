@@ -1071,7 +1071,45 @@ public final class Database
 	// An expression is represented in memory as an abstract syntax tree
 	// made up of instances of the following classes, each of which
 	// references its subexpressions.
+	private interface ExpressionVisitor {
+		void visit(ArithmeticExpression arithmeticExpression);
+		void visit(LogicalExpression logicalExpression);
+		void visit(AtomicExpression atomicExpression);
+		void visit(LikeExpression likeExpression);
+		void visit(NotExpression notExpression);
+		void visit(RelationalExpression relationalExpression);
+	}
+	private class ExpressionPrintVisitor implements ExpressionVisitor{
+		@Override
+		public void visit(ArithmeticExpression arithmeticExpression) {
+			System.out.println(arithmeticExpression.left.toString() + arithmeticExpression.operator + arithmeticExpression.right);
+		}
 
+		@Override
+		public void visit(LogicalExpression logicalExpression) {
+			System.out.println(logicalExpression.left.toString() + logicalExpression.isAnd + logicalExpression.right);
+		}
+
+		@Override
+		public void visit(AtomicExpression atomicExpression) {
+			System.out.println(atomicExpression.atom);
+		}
+
+		@Override
+		public void visit(LikeExpression likeExpression) {
+			System.out.println(likeExpression.left + "like" + likeExpression.right);
+		}
+
+		@Override
+		public void visit(NotExpression notExpression) {
+			System.out.println("not" + notExpression.operand);;
+		}
+
+		@Override
+		public void visit(RelationalExpression relationalExpression) {
+			System.out.println(relationalExpression.left.toString() + relationalExpression.operator + relationalExpression.right);
+		}
+	}
 	private interface Expression
 	{	/* Evaluate an expression using rows identified by the
 		 * two iterators passed as arguments. <code>j</code>
@@ -1113,6 +1151,9 @@ public final class Database
 			 	/* operator == DIVIDE  */   ( l / r )
 			);
 		}
+		public void accept(ExpressionVisitor visitor){
+			visitor.visit(this);
+		}
 	}
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private class LogicalExpression implements Expression
@@ -1141,6 +1182,9 @@ public final class Database
 
 			return new BooleanValue( isAnd ? (l && r) : (l || r) );
 		}
+		public void accept(ExpressionVisitor visitor){
+			visitor.visit(this);
+		}
 	}
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private class NotExpression implements Expression
@@ -1154,6 +1198,9 @@ public final class Database
 			verify( value instanceof BooleanValue,
 					  "operands to NOT must be logical/relational");
 			return new BooleanValue( !((BooleanValue)value).value() );
+		}
+		public void accept(ExpressionVisitor visitor){
+			visitor.visit(this);
 		}
 	}
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1225,6 +1272,9 @@ public final class Database
 				/* operator == GE	 */   ( l >= r )
 			);
 		}
+		public void accept(ExpressionVisitor visitor){
+			visitor.visit(this);
+		}
 	}
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private class LikeExpression implements Expression
@@ -1249,6 +1299,9 @@ public final class Database
 
 			return new BooleanValue( compareTo.matches(regex) );
 		}
+		public void accept(ExpressionVisitor visitor){
+			visitor.visit(this);
+		}
 	}
 	//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	private class AtomicExpression implements Expression
@@ -1261,6 +1314,9 @@ public final class Database
 			 	? ((IdValue)atom).value(tables)	// lookup cell in table and
 				: atom							// convert to appropriate type
 				;
+		}
+		public void accept(ExpressionVisitor visitor){
+			visitor.visit(this);
 		}
 	}
 	//@expression-end
